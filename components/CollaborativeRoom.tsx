@@ -5,7 +5,7 @@ import { Editor } from "@/components/editor/Editor";
 import Header from "@/components/Header";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
-function CollaborativeRoom({ children }: { children: React.ReactNode }) {
+function CollaborativeRoom() {
   return (
     <RoomProvider id="my-room">
       <ClientSideSuspense fallback={<div>Loading…</div>}>
