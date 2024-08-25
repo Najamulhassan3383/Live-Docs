@@ -1,15 +1,43 @@
+import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/nextjs";
+import Image from "next/image";
+import React from "react";
+import AddButtonDocument from "@/components/AddButtonDocument";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-import { Button } from '@/components/ui/button'
-import React from 'react'
+const documents = [];
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-8">Welcome to CollaBraDocs</h1>
-      <p className="text-xl text-center max-w-2xl">
-        A collaborative platform for creating and editing documents in real-time.
-      </p>
-      <Button>Click me</Button>
+    <main className="home-container">
+      <Header className="sticky top-0 top-0">
+        <div className="flex items-center gap-2 lg:gap-2">
+          Notification
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </Header>
+      {documents.length > 0 ? (
+        <div></div>
+      ) : (
+        <div className="document-list-empty">
+          <Image
+            src="/assets/icons/doc.svg"
+            alt="Empty documents"
+            width={40}
+            height={40}
+            className="mx-auto"
+          />
+          <AddButtonDocument userId={user.id} email={user.emailAddresses[0].emailAddress} />
+        </div>
+      )}
     </main>
-  )
+  );
 }
